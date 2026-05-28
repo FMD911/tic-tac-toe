@@ -49,3 +49,32 @@ const GameController = (() => {
   };
 })();
 
+const DisplayController = (() => {
+  const boardContainer = document.getElementById("library");
+
+  function render() {
+    boardContainer.innerHTML = "";
+
+    Gameboard.getBoard().forEach((cell, index) => {
+      const cellButton = document.createElement("button");
+      cellButton.classList.add("cell");
+      cellButton.textContent = cell;
+
+      cellButton.addEventListener("click", () => {
+        if (cell !== "") return;
+
+        GameController.playTurn(index);
+        render();
+      });
+
+      boardContainer.appendChild(cellButton);
+    });
+  }
+
+  return {
+    render
+  };
+})();
+
+DisplayController.render();
+
