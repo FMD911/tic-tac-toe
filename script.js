@@ -1,9 +1,5 @@
 const Gameboard = (() => {
-  const board = [
-    "", "", "",
-    "", "", "",
-    "", "", ""
-  ];
+  const board = ["", "", "", "", "", "", "", "", ""];
 
   const getBoard = () => board;
 
@@ -11,9 +7,16 @@ const Gameboard = (() => {
     board[index] = mark;
   };
 
+  const resetBoard = () => {
+    for (let i = 0; i < board.length; i++) {
+      board[i] = "";
+    }
+  };
+
   return {
     getBoard,
-    placeMark
+    placeMark,
+    resetBoard
   };
 })();
 
@@ -60,6 +63,12 @@ const GameController = (() => {
     return board.every(cell => cell !== "");
   }
 
+  function resetGame() {
+    Gameboard.resetBoard();
+    currentPlayer = playerX;
+    gameOver = false;
+  }
+
   function playTurn(index) {
     if (gameOver) return;
 
@@ -84,7 +93,8 @@ const GameController = (() => {
 
   return {
     playTurn,
-    getCurrentPlayer
+    getCurrentPlayer,
+    resetGame
   };
 })();
 
@@ -108,6 +118,17 @@ const DisplayController = (() => {
 
       boardContainer.appendChild(cellButton);
     });
+
+    const resetBtn = document.createElement("button");
+    resetBtn.textContent = "Reset Game";
+    resetBtn.classList.add("reset");
+
+    resetBtn.addEventListener("click", () => {
+      GameController.resetGame();
+      render();
+    });
+
+    boardContainer.appendChild(resetBtn);
   }
 
   return {
