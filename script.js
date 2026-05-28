@@ -17,5 +17,35 @@ const Gameboard = (() => {
   };
 })();
 
-console.log(Gameboard.getBoard());
+function Player(name, marker) {
+  return {
+    name,
+    marker
+  };
+}
+
+const GameController = (() => {
+  const playerX = Player("Player 1", "X");
+  const playerO = Player("Player 2", "O");
+
+  let currentPlayer = playerX;
+
+  function switchPlayer() {
+    currentPlayer = currentPlayer === playerX ? playerO : playerX;
+  }
+
+  function getCurrentPlayer() {
+    return currentPlayer;
+  }
+
+  function playTurn(index) {
+    Gameboard.placeMark(index, currentPlayer.marker);
+    switchPlayer();
+  }
+
+  return {
+    playTurn,
+    getCurrentPlayer
+  };
+})();
 
