@@ -63,12 +63,6 @@ const GameController = (() => {
     return board.every(cell => cell !== "");
   }
 
-  function resetGame() {
-    Gameboard.resetBoard();
-    currentPlayer = playerX;
-    gameOver = false;
-  }
-
   function playTurn(index) {
     if (gameOver) return;
 
@@ -78,17 +72,23 @@ const GameController = (() => {
 
     if (checkWin(board)) {
       gameOver = true;
-      console.log(`${currentPlayer.name} wins!`);
+      DisplayController.showMessage(`${currentPlayer.name} wins! 🎉`);
       return;
     }
 
     if (checkDraw(board)) {
       gameOver = true;
-      console.log("It's a draw!");
+      DisplayController.showMessage("It's a draw! 🤝");
       return;
     }
 
     switchPlayer();
+  }
+
+  function resetGame() {
+    Gameboard.resetBoard();
+    currentPlayer = playerX;
+    gameOver = false;
   }
 
   return {
@@ -100,6 +100,14 @@ const GameController = (() => {
 
 const DisplayController = (() => {
   const boardContainer = document.getElementById("library");
+  const messageContainer = document.createElement("div");
+
+  messageContainer.classList.add("message");
+  document.body.insertBefore(messageContainer, boardContainer);
+
+  function showMessage(text) {
+    messageContainer.textContent = text;
+  }
 
   function render() {
     boardContainer.innerHTML = "";
@@ -125,6 +133,7 @@ const DisplayController = (() => {
 
     resetBtn.addEventListener("click", () => {
       GameController.resetGame();
+      showMessage("");
       render();
     });
 
@@ -132,9 +141,9 @@ const DisplayController = (() => {
   }
 
   return {
-    render
+    render,
+    showMessage
   };
 })();
 
 DisplayController.render();
-
