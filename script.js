@@ -105,6 +105,8 @@ const DisplayController = (() => {
   messageContainer.classList.add("message");
   document.body.insertBefore(messageContainer, boardContainer);
 
+  let gameEnded = false;
+
   function showMessage(text) {
     messageContainer.textContent = text;
   }
@@ -118,7 +120,7 @@ const DisplayController = (() => {
       cellButton.textContent = cell;
 
       cellButton.addEventListener("click", () => {
-        if (cell !== "") return;
+        if (cell !== "" || gameEnded) return;
 
         GameController.playTurn(index);
         render();
@@ -133,6 +135,7 @@ const DisplayController = (() => {
 
     resetBtn.addEventListener("click", () => {
       GameController.resetGame();
+      gameEnded = false;
       showMessage("");
       render();
     });
@@ -140,9 +143,15 @@ const DisplayController = (() => {
     boardContainer.appendChild(resetBtn);
   }
 
+  function endGame(text) {
+    gameEnded = true;
+    showMessage(text);
+  }
+
   return {
     render,
-    showMessage
+    showMessage,
+    endGame
   };
 })();
 
